@@ -7,13 +7,14 @@ function App() {
   const [height, setHeight] = useState(100);
   const [thick, setThick] = useState(3);
   const [deep, setDeep] = useState(30);
+  const [floor, setFloor] = useState(1);
   let box = useRef(null);
   let element;
 
   useEffect(() => {
     element = box.current;
     console.log(element.clientWidth / 2);
-  }, [width]);
+  }, [width, floor]);
 
   return (
     <div className="App">
@@ -28,32 +29,37 @@ function App() {
             height: height * 2 + "px",
             border: "solid brown " + thick * 2 + "px",
             display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
             alignItems: "center",
             position: "relative",
             marginTop: `${(2 * deep) / Math.tan(45)}px`,
           }}
         >
-          <div
-            style={{
-              borderBottom: "solid white " + thick * 2 + "px",
-              width: width * 2 - 4 * thick,
-              position: "relative",
-            }}
-          >
-            {width - 2 * thick}
+          {Array.from({ length: floor }).map((e, i) => (
             <div
-              className="rotate"
+              key={i}
               style={{
-                borderBottom: `${2 * thick}px solid white`,
-                bottom: 2 * -thick,
-                left: 0,
-                width: deep * 2,
-                position: "absolute",
+                borderBottom: "solid white " + thick * 2 + "px",
+                width: width * 2 - 4 * thick,
+                position: "relative",
               }}
             >
-              {deep - thick}
+              {width - 2 * thick}
+              <div
+                className="rotate"
+                style={{
+                  borderBottom: `${2 * thick}px solid white`,
+                  bottom: 2 * -thick,
+                  left: 0,
+                  width: deep * 2,
+                  position: "absolute",
+                }}
+              >
+                {deep - thick}
+              </div>
             </div>
-          </div>
+          ))}
           <div
             className="rotate"
             style={{
@@ -139,6 +145,17 @@ function App() {
               id="thick-input"
               onChange={(e) => setThick(e.target.value)}
               value={thick}
+            />
+          </div>
+          <div>
+            <label for="floor-input">จำนวนชั้น: </label>
+            <input
+              type="number"
+              id="floor-input"
+              onChange={(e) => {
+                setFloor(e.target.value);
+              }}
+              value={floor}
             />
           </div>
         </div>
